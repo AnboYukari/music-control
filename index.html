@@ -36,13 +36,13 @@
     </div>
     <div id="ui">
         <div id="select_music">
-            <input type="radio" name="music" value="1" checked />
+            <input type="radio" name="music" value="media1" checked/>
             <label> music 1 </label> /
-            <input type="radio" name="music" value="2" />
+            <input type="radio" name="music" value="media2" />
             <label> music 2 </label> /
-            <input type="radio" name="music" value="3" />
+            <input type="radio" name="music" value="media3" />
             <label> music 3 </label> /
-            <input type="radio" name="music" value="4" />
+            <input type="radio" name="music" value="media4" />
             <label> music 4 </label>
         </div>
         <br>
@@ -54,13 +54,23 @@
     </div>
     <br />
     <script>
-        const audio = document.getElementById('media1');
         const tc = document.getElementById('timecode');
         const square = document.getElementById('blinking');
+        var audio = document.getElementById('media1');
 
         tc.textContent = 0;
 
-        audio.addEventListener('timeupdate', (event) => {
+        function audio_select() {
+            var elements = document.getElementsByName("music");
+            for (var a = "", i = elements.length; i--;) {
+            if (elements[i].checked) {
+                a = elements[i].value;
+                console.log(a);
+            }
+        }
+            audio = document.getElementById(a);
+            
+            audio.addEventListener('timeupdate', (event) => {
             tc.textContent = audio.currentTime;
             let ti = parseInt(audio.currentTime);
             if (ti % 2 == 0) {
@@ -70,9 +80,11 @@
             }
 
         });
+        }
 
         function audio_start() {
             audio.currentTime = 0;
+            audio_select();
             audio.play();
         }
 
