@@ -14,7 +14,7 @@
         <br />
     </div>
     <br />
-    <audio id="media1" src="https://bbled.org/kani/audio/01.mp3" controls>
+    <audio id="media1" src="https://bbled.org/kani/audio/01.mp3" value="178" controls>
         bpm: 118
     </audio>
     <audio id="media2" src="https://bbled.org/kani/audio/02.mp3" controls>
@@ -49,64 +49,12 @@
         <input type="button" value="start" onclick="audio_start()" />
         <input type="button" value="play" onclick="audio_play()" />
         <input type="button" value="pause" onclick="audio_pause()" />
-        <input type="button" value="!＜" onclick="audio_back()"/>
+        <input type="button" value="|＜" onclick="audio_back()"/>
         <input type="button" value="＞|" onclick="audio_go()"/>
     </div>
     <br />
-    <script>
-        const tc = document.getElementById('timecode');
-        const square = document.getElementById('blinking');
-        var audio = document.getElementById('media1');
+    <script src="audio.js"></script>
 
-        tc.textContent = 0;
-
-        function audio_select() {
-            var elements = document.getElementsByName("music");
-            for (var a = "", i = elements.length; i--;) {
-            if (elements[i].checked) {
-                a = elements[i].value;
-                console.log(a);
-            }
-        }
-            audio = document.getElementById(a);
-            
-            audio.addEventListener('timeupdate', (event) => {
-            tc.textContent = audio.currentTime;
-            let ti = parseInt(audio.currentTime);
-            if (ti % 2 == 0) {
-                square.style.color = "red";
-            } else {
-                square.style.color = "black";
-            }
-
-        });
-        }
-
-        function audio_start() {
-            audio.currentTime = 0;
-            audio_select();
-            audio.play();
-        }
-
-        function audio_play() {
-            audio.play();
-        }
-        
-        function audio_pause() {
-            audio.pause();
-        }
-
-        function audio_back() {
-            let ti = parseInt(audio.currentTime);
-            audio.currentTime = ti - 1.0;
-        }
-
-        function audio_go() {
-            let ti = parseInt(audio.currentTime);
-            audio.currentTime = ti + 1.0;
-        }
-
-    </script>
 </body>
 
 </html>
