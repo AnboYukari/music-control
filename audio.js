@@ -5,10 +5,9 @@ var audio = document.getElementById('media1');
 var note;
 var bpm = document.getElementById('bpm');
 const bpm_set = [118, 118, 126, 126];
+var timer;
 
 tc.textContent = 0;
-
-console.log(note);
 
 function audio_select() {
     var elements = document.getElementsByName("music");
@@ -16,39 +15,45 @@ function audio_select() {
         if (elements[i].checked) {
             a = elements[i].value;
             bpm.value = bpm_set[i];//ここでbpmの値に選択されたaudioのpbmの値をいれる
-            //console.log(a);
         }
     }
-    AdjustBPM(bpm);
+
     audio = document.getElementById(a);
-    console.log(note);
-
-    audio.addEventListener('timeupdate', (event) => {
-        tc.textContent = audio.currentTime;
-        let ti = audio.currentTime;
-        let sti = parseInt(ti / note);
-        console.log(ti);
-        //console.log(ti / note);
-        //console.log(sti);
-        if (sti % 2 == 0) {
-            square.style.color = "red";
-        } else {
-            square.style.color = "black";
-        }
-
-    });
+    AdjustBPM(bpm);
 }
+
+audio.addEventListener('play', (event) => {//playされたときの動作の追加
+    beat_light();　//20ミリ秒ごとにbeat_lightを実行する
+});
+
+function beat_light() {
+    timer=setInterval(function(){
+    tc.textContent = audio.currentTime;
+    let ti = audio.currentTime;
+    let sti = parseInt(ti / note);//何拍目であるのかを算出
+    console.log(audio.currentTime);
+    if (sti % 2 == 0) {//偶数である場合と奇数である場合で色を変える
+        square.style.color = "red";
+    } else {
+        square.style.color = "black";
+    }
+},20);
+}
+
+function stopTimer(){
+    clearInterval(timer);
+    }
 
 function audio_start() {
     audio.pause();
     audio.currentTime = 0;
-    audio_select();
+    setInterval(audio_select(),20);
     audio.play();
 }
 
 function audio_play() {
     audio.pause();
-    audio.currentTime = ms.value;
+    audio.currentTime = ms.value;//offset
     audio_select();
     audio.play();
 }
@@ -56,6 +61,7 @@ function audio_play() {
 function audio_pause() {
     audio_select();
     audio.pause();
+    stopTimer();
 }
 
 function audio_back() {
