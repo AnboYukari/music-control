@@ -4,6 +4,7 @@ const ms = document.getElementById('offset');
 var audio = document.getElementById('media1');
 var note;
 var bpm = document.getElementById('bpm');
+var send_bpm;
 const bpm_set = [118, 118, 126, 126];
 var timer;
 
@@ -15,6 +16,7 @@ function audio_select() {
         if (elements[i].checked) {
             a = elements[i].value;
             bpm.value = bpm_set[i];//ここでbpmの値に選択されたaudioのpbmの値をいれる
+            send_bpm = bpm_set[i];
         }
     }
 
@@ -49,6 +51,7 @@ function audio_start() {
     audio.currentTime = 0;
     setInterval(audio_select(),20);
     audio.play();
+    sendDataStart();
 }
 
 function audio_play() {
@@ -62,6 +65,7 @@ function audio_pause() {
     audio_select();
     audio.pause();
     stopTimer();
+    sendDataStop();
 }
 
 function audio_back() {
@@ -78,3 +82,17 @@ function AdjustBPM(x) {
     // 音の長さをBPMに合わせる
     note = 60 / x.value;
 }
+
+function sendDataStart(e){
+    if ( isConnected && characteristics != null ){
+      if ( characteristics[0] != null ){
+  
+        const encoder = new TextEncoder('utf-8');
+        let ch = characteristics[0];
+       
+        ch.writeValue(encoder.encode(send_bpm)).then(
+          char => {ch.startNotifications();}
+        );
+      }
+    }
+  }
